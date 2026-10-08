@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Hotel Management System</title>
+
+
+    <!-- ==========================================
+         CSS
+         ========================================== -->
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            background-color: #f4f6f8;
+
+            color: #333;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           HEADER
+           ========================= */
+
+        header {
+
+            background-color: #1f4e78;
+
+            color: white;
+
+            padding: 25px;
+
+            text-align: center;
+
+            box-shadow: 0 2px 8px
+                rgba(0, 0, 0, 0.15);
+        }
+
+
+        header h1 {
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+        }
+
+
+        header p {
+
+            font-size: 16px;
+
+            opacity: 0.9;
+        }
+
+
+        /* =========================
+           MAIN
+           ========================= */
+
+        main {
+
+            width: 90%;
+
+            max-width: 1100px;
+
+            margin: 30px auto;
+        }
+
+
+        /* =========================
+           CARDS
+           ========================= */
+
+        .container {
+
+            background-color: white;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 3px 12px
+                rgba(0, 0, 0, 0.08);
+        }
+
+
+        .container h2 {
+
+            color: #1f4e78;
+
+            margin-bottom: 20px;
+
+            border-bottom: 2px solid #1f4e78;
+
+            padding-bottom: 10px;
+        }
+
+
+        /* =========================
+           FORM
+           ========================= */
+
+        .form-group {
+
+            margin-bottom: 18px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+            color: #333;
+        }
+
+
+        .form-group input,
+        .form-group select {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+
+        .form-group input:focus,
+        .form-group select:focus {
+
+            border-color: #1f4e78;
+
+            box-shadow: 0 0 4px
+                rgba(31, 78, 120, 0.3);
+        }
+
+
+        /* Date fields */
+
+        .date-row {
+
+            display: flex;
+
+            gap: 20px;
+        }
+
+
+        .date-row .form-group {
+
+            flex: 1;
+        }
+
+
+        /* =========================
+           BUTTONS
+           ========================= */
+
+        .button-row {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 10px;
+        }
+
+
+        button {
+
+            border: none;
+
+            border-radius: 5px;
+
+            padding: 12px 20px;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .book-btn {
+
+            background-color: #1f4e78;
+
+            color: white;
+        }
+
+
+        .book-btn:hover {
+
+            background-color: #163a5a;
+        }
+
+
+        .reset-btn {
+
+            background-color: #777;
+
+            color: white;
+        }
+
+
+        .reset-btn:hover {
+
+            background-color: #555;
+        }
+
+
+        .refresh-btn {
+
+            background-color: #2e7d32;
+
+            color: white;
+
+            margin-bottom: 20px;
+        }
+
+
+        .refresh-btn:hover {
+
+            background-color: #205a23;
+        }
+
+
+        .book-room-btn {
+
+            background-color: #d9534f;
+
+            color: white;
+
+            width: 100%;
+
+            margin-top: 10px;
+        }
+
+
+        .book-room-btn:hover {
+
+            background-color: #c9302c;
+        }
+
+
+        /* =========================
+           MESSAGE
+           ========================= */
+
+        #message {
+
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+        }
+
+
+        .success {
+
+            display: block !important;
+
+            background-color: #d4edda;
+
+            color: #155724;
+
+            border: 1px solid #c3e6cb;
+        }
+
+
+        .error {
+
+            display: block !important;
+
+            background-color: #f8d7da;
+
+            color: #721c24;
+
+            border: 1px solid #f5c6cb;
+        }
+
+
+        /* =========================
+           ROOMS
+           ========================= */
+
+        .rooms-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+
+        .room-card {
+
+            background-color: #fafafa;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            padding: 20px;
+
+            transition: 0.2s;
+        }
+
+
+        .room-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 4px 10px
+                rgba(0, 0, 0, 0.1);
+        }
+
+
+        .room-card h3 {
+
+            color: #1f4e78;
+
+            margin-bottom: 12px;
+
+            font-size: 20px;
+        }
+
+
+        .room-card p {
+
+            margin: 8px 0;
+
+            font-size: 15px;
+        }
+
+
+        .available {
+
+            color: #2e7d32;
+
+            font-weight: bold;
+        }
+
+
+        .unavailable {
+
+            color: #d9534f;
+
+            font-weight: bold;
+        }
+
+
+        .no-rooms {
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #777;
+        }
+
+
+        .loading {
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #1f4e78;
+        }
+
+
+        /* =========================
+           FOOTER
+           ========================= */
+
+        footer {
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #777;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           RESPONSIVE DESIGN
+           ========================= */
+
+        @media (max-width: 600px) {
+
+            main {
+
+                width: 95%;
+
+                margin: 20px auto;
+            }
+
+
+            .container {
+
+                padding: 18px;
+            }
+
+
+            header h1 {
+
+                font-size: 24px;
+            }
+
+
+            .date-row {
+
+                flex-direction: column;
+
+                gap: 0;
+            }
+
+
+            .button-row {
+
+                flex-direction: column;
+            }
+
+
+            .button-row button {
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         HEADER
+         ========================================== -->
+
+    <header>
+
+        <h1>Hotel Management System</h1>
+
+        <p>
+            Hotel Room Booking and Management
+        </p>
+
+    </header>
+
+
+
+    <main>
+
+
+        <!-- ==========================================
+             BOOKING FORM
+             ========================================== -->
+
+        <section class="container">
+
+            <h2>Hotel Room Booking Form</h2>
+
+
+            <form id="bookingForm">
+
+
+                <!-- Guest Name -->
+
+                <div class="form-group">
+
+                    <label for="guestName">
+                        Guest Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="guestName"
+                        placeholder="Enter guest name"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- Email -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter email address"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- Phone -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter 10-digit phone number"
+                        maxlength="10"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- Room Type -->
+
+                <div class="form-group">
+
+                    <label for="roomType">
+                        Room Type
+                    </label>
+
+                    <select
+                        id="roomType"
+                        required
+                    >
+
+                        <option value="">
+                            -- Select Room Type --
+                        </option>
+
+                        <option value="Single">
+                            Single
+                        </option>
+
+                        <option value="Double">
+                            Double
+                        </option>
+
+                        <option value="Deluxe">
+                            Deluxe
+                        </option>
+
+                        <option value="Suite">
+                            Suite
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- Dates -->
+
+                <div class="date-row">
+
+
+                    <!-- Check In -->
+
+                    <div class="form-group">
+
+                        <label for="checkIn">
+                            Check-in Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="checkIn"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Check Out -->
+
+                    <div class="form-group">
+
+                        <label for="checkOut">
+                            Check-out Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="checkOut"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- Number of Guests -->
+
+                <div class="form-group">
+
+                    <label for="guests">
+                        Number of Guests
+                    </label>
+
+                    <input
+                        type="number"
+                        id="guests"
+                        min="1"
+                        max="10"
+                        placeholder="Enter number of guests"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- Buttons -->
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        class="book-btn"
+                    >
+                        Submit Booking
+                    </button>
+
+
+                    <button
+                        type="reset"
+                        class="reset-btn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+
+            <!-- Confirmation message -->
+
+            <div id="message"></div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             AVAILABLE ROOMS
+             ========================================== -->
+
+        <section class="container">
+
+            <h2>Available Rooms</h2>
+
+
+            <button
+                type="button"
+                class="refresh-btn"
+                id="refreshButton"
+            >
+                Refresh Rooms
+            </button>
+
+
+            <div id="roomsList">
+
+                <div class="loading">
+                    Loading rooms...
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+
+    <footer>
+
+        Hotel Management System © 2026
+
+    </footer>
+
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+         ========================================== -->
+
+    <script>
+
+
+        // =========================================
+        // GET HTML ELEMENTS
+        // =========================================
+
+        const bookingForm =
+            document.getElementById("bookingForm");
+
+        const message =
+            document.getElementById("message");
+
+        const roomsList =
+            document.getElementById("roomsList");
+
+        const refreshButton =
+            document.getElementById("refreshButton");
+
+        const checkIn =
+            document.getElementById("checkIn");
+
+        const checkOut =
+            document.getElementById("checkOut");
+
+
+
+        // =========================================
+        // SET TODAY AS MINIMUM DATE
+        // =========================================
+
+        const today =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+
+        checkIn.min = today;
+
+        checkOut.min = today;
+
+
+
+        // =========================================
+        // CHECK-IN DATE CHANGE
+        // =========================================
+
+        checkIn.addEventListener(
+            "change",
+            function () {
+
+                checkOut.min = checkIn.value;
+
+            }
+        );
+
+
+
+        // =========================================
+        // SHOW MESSAGE
+        // =========================================
+
+        function showMessage(
+            text,
+            type
+        ) {
+
+            message.textContent = text;
+
+            message.className = type;
+
+        }
+
+
+
+        // =========================================
+        // BOOKING FORM SUBMIT
+        // =========================================
+
+        bookingForm.addEventListener(
+            "submit",
+            function (event) {
+
+                // Prevent page refresh
+
+                event.preventDefault();
+
+
+                // Get values
+
+                const guestName =
+                    document
+                        .getElementById("guestName")
+                        .value
+                        .trim();
+
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
+
+
+                const phone =
+                    document
+                        .getElementById("phone")
+                        .value
+                        .trim();
+
+
+                const roomType =
+                    document
+                        .getElementById("roomType")
+                        .value;
+
+
+                const checkInDate =
+                    document
+                        .getElementById("checkIn")
+                        .value;
+
+
+                const checkOutDate =
+                    document
+                        .getElementById("checkOut")
+                        .value;
+
+
+                const guests =
+                    Number(
+                        document
+                            .getElementById("guests")
+                            .value
+                    );
+
+
+
+                // =================================
+                // VALIDATE NAME
+                // =================================
+
+                if (guestName.length < 3) {
+
+                    showMessage(
+                        "Guest name must contain at least 3 characters.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+
+                // =================================
+                // VALIDATE EMAIL
+                // =================================
+
+                const emailPattern =
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+                if (!emailPattern.test(email)) {
+
+                    showMessage(
+                        "Please enter a valid email address.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+
+                // =================================
+                // VALIDATE PHONE
+                // =================================
+
+                const phonePattern =
+                    /^[0-9]{10}$/;
+
+
+                if (!phonePattern.test(phone)) {
+
+                    showMessage(
+                        "Phone number must contain exactly 10 digits.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+
+                // =================================
+                // VALIDATE ROOM TYPE
+                // =================================
+
+                if (roomType === "") {
+
+                    showMessage(
+                        "Please select a room type.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+
+                // =================================
+                // VALIDATE DATES
+                // =================================
+
+                if (
+                    checkInDate === "" ||
+                    checkOutDate === ""
+                ) {
+
+                    showMessage(
+                        "Please select check-in and check-out dates.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                if (checkOutDate <= checkInDate) {
+
+                    showMessage(
+                        "Check-out date must be after check-in date.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+
+                // =================================
+                // VALIDATE GUESTS
+                // =================================
+
+                if (
+                    guests < 1 ||
+                    guests > 10
+                ) {
+
+                    showMessage(
+                        "Number of guests must be between 1 and 10.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+
+                // =================================
+                // SUCCESS
+                // =================================
+
+                showMessage(
+                    "Booking confirmed successfully for "
+                    + guestName
+                    + "! Room type: "
+                    + roomType
+                    + ".",
+                    "success"
+                );
+
+
+                // Reset form
+
+                bookingForm.reset();
+
+
+                // Restore minimum dates
+
+                checkIn.min = today;
+
+                checkOut.min = today;
+
+            }
+        );
+
+
+
+        // =========================================
+        // LOAD AVAILABLE ROOMS
+        // =========================================
+
+        async function loadAvailableRooms() {
+
+            roomsList.innerHTML =
+                '<div class="loading">Loading rooms...</div>';
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "api/rooms/available"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to fetch rooms"
+                    );
+
+                }
+
+
+                const rooms =
+                    await response.json();
+
+
+                // No rooms
+
+                if (rooms.length === 0) {
+
+                    roomsList.innerHTML =
+                        `
+                        <div class="no-rooms">
+                            No rooms are currently available.
+                        </div>
+                        `;
+
+                    return;
+                }
+
+
+                // Create grid
+
+                const grid =
+                    document.createElement("div");
+
+                grid.className =
+                    "rooms-grid";
+
+
+                // Create room cards
+
+                rooms.forEach(
+                    function (room) {
+
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        card.className =
+                            "room-card";
+
+
+                        card.innerHTML = `
+
+                            <h3>
+                                Room ${room.roomNumber}
+                            </h3>
+
+                            <p>
+                                <strong>
+                                    Room ID:
+                                </strong>
+                                ${room.roomId}
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Room Type:
+                                </strong>
+                                ${room.roomType}
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Floor:
+                                </strong>
+                                ${room.floor}
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Availability:
+                                </strong>
+
+                                <span class="available">
+                                    Available
+                                </span>
+                            </p>
+
+                            <button
+                                class="book-room-btn"
+                                onclick="
+                                    markRoomBooked(
+                                        ${room.roomId}
+                                    )
+                                "
+                            >
+                                Mark as Booked
+                            </button>
+
+                        `;
+
+
+                        grid.appendChild(card);
+
+                    }
+                );
+
+
+                roomsList.innerHTML = "";
+
+                roomsList.appendChild(grid);
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                roomsList.innerHTML = `
+
+                    <div class="no-rooms">
+
+                        Unable to load rooms.
+
+                        <br><br>
+
+                        Please check your
+                        MongoDB connection
+                        and server.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // MARK ROOM AS BOOKED
+        // =========================================
+
+        async function markRoomBooked(roomId) {
+
+            const confirmBooking =
+                confirm(
+                    "Are you sure you want to mark Room "
+                    + roomId
+                    + " as booked?"
+                );
+
+
+            if (!confirmBooking) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `api/rooms/${roomId}/availability`,
+                        {
+
+                            method: "PATCH",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                availability: false
+                            })
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    alert(
+                        result.message ||
+                        "Unable to update room."
+                    );
+
+                    return;
+                }
+
+
+                alert(
+                    "Room "
+                    + roomId
+                    + " has been marked as booked."
+                );
+
+
+                // Reload available rooms
+
+                loadAvailableRooms();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to connect to the server."
+                );
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // REFRESH BUTTON
+        // =========================================
+
+        refreshButton.addEventListener(
+            "click",
+            loadAvailableRooms
+        );
+
+
+
+        // =========================================
+        // LOAD ROOMS WHEN PAGE OPENS
+        // =========================================
+
+        loadAvailableRooms();
+
+
+    </script>
+
+
+</body>
+
+</html>
